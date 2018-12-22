@@ -1,4 +1,4 @@
-package tradingmachines;
+package com.hvo.tradingmachines;
 
 import com.hvo.currency.Banknote;
 import com.hvo.currency.Coin;

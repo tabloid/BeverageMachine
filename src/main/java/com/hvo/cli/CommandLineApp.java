@@ -42,7 +42,8 @@ public class CommandLineApp {
                         printStatistic();
                         break;
                     case "CANCEL":
-                        pressCancel();
+                        cancelPurchase();
+                        printStatistic();
                         break;
                     case "ADD":
                         printMessage("Enter currency type:");
@@ -171,13 +172,26 @@ public class CommandLineApp {
         if (optionalProduct.isPresent()) {
             try {
                 List<Currency> list = machine.purchase(optionalProduct.get());
-                System.out.println("Purchase is finished. Change: " + list);
+                System.out.println("Purchase is finished.");
+                System.out.println("Change: " + sum(list) + " " + list);
             } catch (OperationIsNotSupportedException ex) {
                 System.out.println(ex.getMessage());
             }
         } else {
             System.out.println("Product is not supported.");
         }
+    }
+
+    private void cancelPurchase() {
+        printLine();
+        List<Currency> list = machine.cancelPurchase();
+        System.out.println("Purchase is canceled.");
+        System.out.println("Change: " + sum(list) + " " + list);
+        printLine();
+    }
+
+    private int sum(List<Currency> list){
+        return list.stream().mapToInt(c -> c.getNominal()).sum();
     }
 
     private Optional<Product> parseProduct(String name) {
@@ -189,13 +203,5 @@ public class CommandLineApp {
         }
         return Optional.ofNullable(product);
     }
-
-    private void pressCancel() {
-        printLine();
-        List<Currency> list = machine.cancelPurchase();
-        System.out.println("Purchase is canceled. Refund: " + list);
-        printLine();
-    }
-
 
 }
